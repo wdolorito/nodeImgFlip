@@ -1,0 +1,25 @@
+{
+  "name": "nodeimgflip",
+  "version": "1.0.0",
+  "description": "Meme generator app (https://api.imgflip.com)",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "William Dolorito",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^4.17.1",
+    "gmail-send": "^1.8.10",
+    "node-cache": "^4.2.1",
+    "socket.io": "^2.3.0",
+    "throttled-queue": "^1.0.7"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.3"
+  }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--[if lte IE 6]><html class="preIE7 preIE8 preIE9"><![endif]-->
+<!--[if IE 7]><html class="preIE8 preIE9"><![endif]-->
+<!--[if IE 8]><html class="preIE9"><![endif]-->
+<!--[if gte IE 9]><!--><html><!--<![endif]-->
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Simple imgflip meme generator</title>
+  <link rel="shortcut icon" type="image/png" href="https://png.icons8.com/ios/50/000000/doge-filled.png">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+</head>
+
+<body>
+  <div class="container center-align">
+    <div class="row">
+      <p>This site is an exercise in writing a node app to access an API. Everything generated dynamically on this page is from <a href="https://api.imgflip.com//">https://api.imgflip.com/</a>.</p>
+      <p>Also, favicon from <a href="https://icons8.com">Icon pack by Icons8</a></p>
+      <p><a class="modal-trigger btn waves-effect waves-light blue accent-1" href="#emailMe">Email Me!</a></p>
+    </div>
+
+    <div id="emailMe" class="modal blue lighten-5">
+      <div class="modal-content">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">person</i>
+              <input placeholder="A Name" id="name" name="name" type="text">
+              <label for="name">Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">email</i>
+              <input placeholder="name@example.com" id="email" name="email" type="email" class="validate">
+              <label for="email">Email address</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">forum</i>
+              <textarea placeholder="Howdy!" id="subjectArea" name="subjectArea" class="materialize-textarea"></textarea>
+              <label for="subjectArea">Subject</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <i class="material-icons prefix">edit</i>
+              <textarea placeholder="Your site is handy!" id="messageArea" name="messageArea" class="materialize-textarea"></textarea>
+              <label for="messageArea">Message</label>
+            </div>
+          </div>
+          <div class="row right">
+            <a class="modal-action modal-close btn waves-effect waves-light blue accent-1">Cancel<i class="material-icons right">close</i></a>
+            <a id="sender" class="btn waves-effect waves-light blue accent-1">send<i class="material-icons right">send</i></a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  			  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <script src="/socket.io/socket.io.js" type="text/javascript"></script>
+  <script src="/js/script.js" type="text/javascript"></script>
+</body>
+</html>
