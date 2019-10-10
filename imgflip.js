@@ -1,6 +1,5 @@
 const https = require('https')
 const URL = require('url')
-const querystring = require('querystring')
 const qs = require('qs')
 const throttledQueue = require('throttled-queue')
 const throttle = throttledQueue(1, 500)               // 1 req/500ms
@@ -49,11 +48,8 @@ const makeCall = (url, type, payload) => {
           break
         case 'post':
           const urlobj = URL.parse(url)
-          const jbody = JSON.stringify(payload).replace(/\\"/g, '"')
-
           const body = qs.stringify(payload)
 
-          console.log(jbody)
           console.log(body)
 
           const options = {
@@ -63,7 +59,7 @@ const makeCall = (url, type, payload) => {
             path: urlobj.path,
             method: 'POST',
             headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
               'Content-Length': body.length
             }
           }
@@ -80,7 +76,8 @@ const makeCall = (url, type, payload) => {
             rej(err)
           })
 
-          res('sent')
+          // res('{"success":false,"error_message":"No texts specified. Remember, API request params are http parameters not JSON."}')
+          res('{"success":true,"data":{"url":"https:\/\/i.imgflip.com\/3cyq2z.jpg","page_url":"https:\/\/imgflip.com\/i\/3cyq2z"}}')
 
           // req.write(body)
           // req.end()

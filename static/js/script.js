@@ -13,7 +13,24 @@ const setupSocket = () => {
 
   socket.on('created', resp => {
     console.log(resp)
+    const response = JSON.parse(resp)
+    const success = response.success
+
+    if(success) {
+      showMeme(response.data)
+    } else {
+      alert(response.error_message)
+    }
   })
+}
+
+const showMeme = data => {
+  const {
+    url,
+    page_url
+  } = data
+
+  console.log(url, page_url)
 }
 
 const findid = meme => {
@@ -103,11 +120,20 @@ const hideBoxes = () => {
   }
 }
 
+$('input:checkbox').on('change',() => {
+  const state = $(this).checked
+  if(state) {
+    console.log('on')
+  } else {
+    console.log('off')
+  }
+})
+
 $('#refresh').click(() => {
   socket.emit('getall')
 })
 
-$('.fontchoice').click((e) => {
+$('.fontchoice').click(e => {
   const font = $(e.target).attr('str')
   $('#fontTitle').html(font)
 })
