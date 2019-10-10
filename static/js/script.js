@@ -123,25 +123,30 @@ $('#create').click((e) => {
    *
    */
 
+   const payload = {}
    const template_id = loadedmemes[current].id
+   payload.template_id = template_id
+
    const username = $('#username').html()
+   payload.username = username
+
    const password = $('#password').html()
+   payload.password = password
+
    const font = $('#fontTitle').html()
+   payload.font = font
+
    const boxes = []
-   for(let count=0; count < 5; count++) {
+   for(let count = 0; count < 5; count++) {
      let element = '#textbox_'
      element += count.toString()
+     if(count === 0) payload.text0 = $(element).val()
+     if(count === 1) payload.text1 = $(element).val()
      if(!$(element).hasClass('hide')) {
        const obj = JSON.parse('{ "text": "' + $(element).val() + '" }')
        boxes.push(obj)
      }
    }
-
-   const payload = {}
-   payload.template_id = template_id
-   payload.username = username
-   payload.password = password
-   payload.font = font
    payload.boxes = boxes
 
    socket.emit('create', payload)

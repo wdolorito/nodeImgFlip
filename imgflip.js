@@ -1,6 +1,7 @@
 const https = require('https')
 const URL = require('url')
 const querystring = require('querystring')
+const qs = require('qs')
 const throttledQueue = require('throttled-queue')
 const throttle = throttledQueue(1, 500)               // 1 req/500ms
 const NodeCache = require('node-cache')
@@ -49,15 +50,8 @@ const makeCall = (url, type, payload) => {
         case 'post':
           const urlobj = URL.parse(url)
           const jbody = JSON.stringify(payload).replace(/\\"/g, '"')
-          const toWork = payload
-          const tboxes = toWork.boxes
-          delete toWork.boxes
 
-          let body = querystring.stringify(toWork) + '&boxes[]='
-
-          tboxes.forEach(text => {
-            body += '&' + querystring.stringify(text)
-          })
+          const body = qs.stringify(payload)
 
           console.log(jbody)
           console.log(body)
