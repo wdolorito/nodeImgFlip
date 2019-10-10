@@ -1,8 +1,151 @@
 let socket = {}
+let loadedmemes = []
+let font = 'impact'
+let current = 0
 
 const setupSocket = () => {
   socket = io()
+
+  socket.on('gotall', raw => {
+    populateAll(raw)
+    populateWorker(0)
+  })
+
+  socket.on('created', resp => {
+    console.log(resp)
+  })
 }
+
+const findid = meme => {
+  return meme.id === meme
+}
+
+const handleClick = mid => {
+  populateWorker(mid)
+  $(window).scrollTop(0)
+}
+
+const populateAll = raw => {
+  loadedmemes = []
+  let json = JSON.parse(raw)
+  if(json.success) {
+    const memes = json.data.memes
+    const len = memes.length
+    let html = ''
+    for(let count = 0; count < len; count++) {
+      const meme = memes[count]
+      loadedmemes.push(meme)
+
+      const newrow = count % 3
+      if(newrow === 0) {
+        html += '<div class="row">\n'
+      }
+      html += '  <div class="col s12 m4">\n'
+      html += '    <div class="card">\n'
+      html += '      <div class="card-content">\n'
+      html += '        <span class="card-title">' + meme.name + '</span>\n'
+      html += '        <img class="responsive-img" src="' + meme.url + '"/>\n'
+      html += '      </div>\n'
+      html += '      <div class="card-action">\n'
+      html += '        <p><strong>ID: </strong>' + meme.id + '</p>\n'
+      html += '        <a class="waves-effect waves-teal btn-flat" onclick=handleClick(' + count + ')>Pick me!</a>\n'
+      html += '      </div>\n'
+      html += '    </div>\n'
+      html += '  </div>\n'
+      if(newrow === 2) {
+        html += '</div>\n'
+      }
+    }
+    $('#all').html(html)
+  }}
+
+const populateWorker = (index) => {
+  /*
+   * html replacement:
+   *  #wmtitle => meme.name
+   *  #wmimg src => meme.url
+   *  #wmid => <strong>ID: </strong>meme.id
+   *
+   */
+
+   current = index
+
+   hideBoxes()
+
+   const meme = loadedmemes[current]
+   const template_id = meme.id
+   const boxes = meme.box_count
+
+   for(let count = 0; count < boxes; count++) {
+     let element = '#textbox_'
+     element += count.toString()
+     $(element).removeClass('hide')
+   }
+
+   $('#wmtitle').html(meme.name)
+   $('#wmimg').attr('src', meme.url)
+   $('#wmid').html('<strong>ID: </strong>' + meme.id)
+   $('#create').removeClass('hide')
+}
+
+const initPage = () => {
+  hideBoxes()
+  socket.emit('getall')
+}
+
+const hideBoxes = () => {
+  $('#create').addClass('hide')
+  for(let count = 0; count < 5; count++) {
+    let element = '#textbox_'
+    element += count.toString()
+    $(element).val('')
+    $(element).addClass('hide')
+  }
+}
+
+$('#refresh').click(() => {
+  socket.emit('getall')
+})
+
+$('.fontchoice').click((e) => {
+  const font = $(e.target).attr('str')
+  $('#fontTitle').html(font)
+})
+
+$('#create').click((e) => {
+  /*
+   * to post:
+   *   template_id: meme.id
+   *   username: <input>
+   *   password: <input>
+   *   font: impact or arial picker
+   *   boxes: [{"text": <input>}] <== from memes.boxes
+   *
+   */
+
+   const template_id = loadedmemes[current].id
+   const username = $('#username').html()
+   const password = $('#password').html()
+   const font = $('#fontTitle').html()
+   const boxes = []
+   for(let count=0; count < 5; count++) {
+     let element = '#textbox_'
+     element += count.toString()
+     if(!$(element).hasClass('hide')) {
+       const obj = JSON.parse('{ "text": "' + $(element).val() + '" }')
+       boxes.push(obj)
+     }
+   }
+
+   const payload = {}
+   payload.template_id = template_id
+   payload.username = username
+   payload.password = password
+   payload.font = font
+   payload.boxes = boxes
+
+   socket.emit('create', payload)
+})
 
 $('#sender').click(() => {
   const name = $('#name').val()
@@ -16,7 +159,7 @@ $('#sender').click(() => {
       url: '/',
       type: 'post',
       data: data,
-      success: function() {
+      success: () => {
         $('.modal').modal('close')
         alert('Thank you for the message ' + name + '!')
         $('form').trigger('reset')
@@ -53,5 +196,7 @@ $('#sender').click(() => {
 
 $(document).ready(() => {
   $('.modal').modal()
+  $('.dropdown-button').dropdown()
   setupSocket()
+  initPage()
 })

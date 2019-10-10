@@ -17,7 +17,98 @@
 <body>
   <div class="container center-align">
     <div class="row">
-      <p>This site is an exercise in writing a node app to access an API. Everything generated dynamically on this page is from <a href="https://api.imgflip.com//">https://api.imgflip.com/</a>.</p>
+      <div class="col s12 m2"></div>
+      <div class="col s12 m8">
+        <div class="row">
+          <h1>Create a meme</h1>
+
+          <div class="col s12 m8">
+            <div class="card">
+              <div class="card-content">
+                <span id="wmtitle" class="card-title"></span>
+                <img id="wmimg" class="responsive-img" src=""/>
+              </div>
+              <div class="card-action">
+                <p id="wmid" ></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m4">
+            <div class="row">
+              <div class="input-field">
+                <input placeholder="Text #1" id="textbox_0" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field">
+                <input placeholder="Text #2" id="textbox_1" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field">
+                <input placeholder="Text #3" id="textbox_2" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field">
+                <input placeholder="Text #4" id="textbox_3" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="input-field">
+                <input placeholder="Text #5" id="textbox_4" type="text">
+              </div>
+            </div>
+
+            <div class="row">
+              <h5>Font: </h5>
+              <a id="fontTitle" class="dropdown-button btn waves-effect waves-light blue accent-1" data-activates="fontchoices">impact</a>
+              <ul id="fontchoices" class="dropdown-content">
+                <li class="fontchoice" str="arial">arial</li>
+                <li class="fontchoice" str="impact">impact</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="row">
+            <h5>Save meme to your imgflip account?</h5>
+          </div>
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="input-field">
+                <input placeholder="Username" id="username" type="text">
+              </div>
+            </div>
+            <div class="col s12 m6">
+              <div class="input-field">
+                <input placeholder="Password" id="password" type="password">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <a id="create" class="btn waves-effect waves-light blue accent-1">create</a>
+          </div>
+        </div>
+      </div>
+      <div class="col s12 m2"></div>
+    </div>
+
+
+    <div class="row">
+      <h1>Take your Pick...</h1>
+      <a id="refresh" class="btn waves-effect waves-light blue accent-1 mb-2">refresh choices</a>
+      <div id="all" class="row"></div>
+    </div>
+
+    <div class="row">
+      <p>This site is an exercise in writing a node app to access an API. Everything dynamically generated on this page is from <a href="https://api.imgflip.com//">https://api.imgflip.com/</a>.</p>
       <p>Also, favicon from <a href="https://icons8.com">Icon pack by Icons8</a></p>
       <p><a class="modal-trigger btn waves-effect waves-light blue accent-1" href="#emailMe">Email Me!</a></p>
     </div>

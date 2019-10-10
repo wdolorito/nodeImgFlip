@@ -1,4 +1,6 @@
 const https = require('https')
+const URL = require('url')
+const querystring = require('querystring')
 const throttledQueue = require('throttled-queue')
 const throttle = throttledQueue(1, 500)               // 1 req/500ms
 const NodeCache = require('node-cache')
@@ -23,30 +25,84 @@ endpoints.get_memes = 'get_memes'                     // GET
 endpoints.caption_mage = 'caption_image'              // POST
 
 // Send all API calls through throttledQueue
-const makeCall = url => {
+const makeCall = (url, type, payload) => {
   return new Promise((res, rej) => {
     throttle(() => {
-      https.get(url, resp => {
-        let data = ''
-        // A chunk of data has been recieved.
-        resp.on('data', chunk => {
-          data += chunk
-        })
+      switch(type) {
+        case 'get':
+          https.get(url, resp => {
+            let data = ''
+            // A chunk of data has been recieved.
+            resp.on('data', chunk => {
+              data += chunk
+            })
 
-        // The whole response has been received. Print out the result.
-        resp.on('end', () => {
-          res(data)
-        })
-      }).on("error", err => {
-        console.log("Call Error: " + err.message)
-        rej(err)
-      })
+            // The whole response has been received. Print out the result.
+            resp.on('end', () => {
+              res(data)
+            })
+          }).on("error", err => {
+            console.log("Call Error: " + err.message)
+            rej(err)
+          })
+          break
+        case 'post':
+          const urlobj = URL.parse(url)
+          const jbody = JSON.stringify(payload).replace(/\\"/g, '"')
+          const toWork = payload
+          const tboxes = toWork.boxes
+          delete toWork.boxes
+
+          let body = querystring.stringify(toWork) + '&boxes[]='
+
+          tboxes.forEach(text => {
+            body += '&' + querystring.stringify(text)
+          })
+
+          console.log(jbody)
+          console.log(body)
+
+          const options = {
+            protocol: 'https:',
+            host: urlobj.host,
+            port: 443,
+            path: urlobj.path,
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Content-Length': body.length
+            }
+          }
+
+          const req = https.request(options, resp => {
+            resp.setEncoding('utf8')
+
+            resp.on('data', d => {
+              res(d)
+            })
+          })
+
+          req.on('error', err => {
+            rej(err)
+          })
+
+          res('sent')
+
+          // req.write(body)
+          // req.end()
+          break
+        default:
+      }
     })
   })
 }
 
 // Cache requests
-const cacheCall = async (url, cache) => {
+const cacheCall = async (url, type, cache, payload) => {
+  const result = await makeCall(url, type, payload).catch(err => {
+    console.log(err)
+  })
+
   if(cache) {
     switch(cache) {
       case 'long':
@@ -54,9 +110,6 @@ const cacheCall = async (url, cache) => {
           if(!err) {
             if(val === undefined) {
               console.log('long cache miss', url)
-              const result = await makeCall(url).catch(err => {
-                console.log(err)
-              })
               longCache.set(url, result)
               return result
             } else {
@@ -71,9 +124,6 @@ const cacheCall = async (url, cache) => {
           if(!err) {
             if(val === undefined) {
               console.log('short cache miss', url)
-              const result = await makeCall(url).catch(err => {
-                console.log(err)
-              })
               shortCache.set(url, result)
               return result
             } else {
@@ -87,24 +137,30 @@ const cacheCall = async (url, cache) => {
     }
   }
 
-  return await makeCall(url)
+  return result
 }
 
-const longCacheCall = async (url) => {
-  return await cacheCall(url, 'long')
+const longCacheCall = async (url, type, payload) => {
+  return await cacheCall(url, type, 'long', payload)
 }
 
-const shortCacheCall = async (url) => {
-  return await cacheCall(url, 'short')
+const shortCacheCall = async (url, type, payload) => {
+  return await cacheCall(url, type, 'short', payload)
 }
 
 const getMemes = () => {
   const fullLink = baseLink + endpoints.get_memes
-  return longCacheCall(fullLink)
+  return longCacheCall(fullLink, 'get')
+}
+
+const createMeme = (payload) => {
+  const fullLink = baseLink + endpoints.caption_mage
+  return shortCacheCall(fullLink, 'post', payload)
 }
 
 const imgflip = {}
 
 imgflip.getMemes = getMemes
+imgflip.createMeme = createMeme
 
 module.exports = imgflip
