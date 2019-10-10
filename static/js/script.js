@@ -12,14 +12,13 @@ const setupSocket = () => {
   })
 
   socket.on('created', resp => {
-    console.log(resp)
     const response = JSON.parse(resp)
     const success = response.success
 
     if(success) {
       showMeme(response.data)
     } else {
-      alert(response.error_message)
+      Materialize.toast(response.error_message, 4000)
     }
   })
 }
@@ -30,7 +29,17 @@ const showMeme = data => {
     page_url
   } = data
 
+  $('#rimg').attr('src', url)
+  $('#rpage').html('<a href="' + page_url + '">' + page_url + '</a>')
+  $('#result').removeClass('hide')
+
   console.log(url, page_url)
+}
+
+const resetMeme = () => {
+  $('#rimg').attr('src', '')
+  $('#rpage').html('')
+  $('#result').addClass('hide')
 }
 
 const findid = meme => {
@@ -106,6 +115,7 @@ const populateWorker = (index) => {
 }
 
 const initPage = () => {
+  resetMeme()
   hideBoxes()
   socket.emit('getall')
 }
@@ -120,13 +130,19 @@ const hideBoxes = () => {
   }
 }
 
-$('input:checkbox').on('change',() => {
-  const state = $(this).checked
-  if(state) {
-    console.log('on')
+const checkCreds = () => {
+  const state = $('input[name=saver]:checked', '#saveto').val()
+  if(state === 'true') {
+    $('.creds').removeClass('hide')
   } else {
-    console.log('off')
+    $('.creds').addClass('hide')
+    $('#username').val('')
+    $('#password').val('')
   }
+}
+
+$('#saveto input').on('change', () => {
+  checkCreds()
 })
 
 $('#refresh').click(() => {
@@ -149,14 +165,15 @@ $('#create').click((e) => {
    *
    */
 
+   resetMeme()
    const payload = {}
    const template_id = loadedmemes[current].id
    payload.template_id = template_id
 
-   const username = $('#username').html()
+   const username = $('#username').val()
    payload.username = username
 
-   const password = $('#password').html()
+   const password = $('#password').val()
    payload.password = password
 
    const font = $('#fontTitle').html()
@@ -228,6 +245,7 @@ $('#sender').click(() => {
 $(document).ready(() => {
   $('.modal').modal()
   $('.dropdown-button').dropdown()
+  checkCreds()
   setupSocket()
   initPage()
 })

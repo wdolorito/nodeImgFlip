@@ -79,7 +79,16 @@
         <div class="row">
           <div class="row">
             <h5>Save meme to your imgflip account?</h5>
-            <p><input type="checkbox" id="checker"/></p>
+            <form id="saveto">
+              <div class="col s12 m6">
+                <input name="saver" type="radio" id="no" value="false" checked />
+                <label for="no">NAH...</label>
+              </div>
+              <div class="col s12 m6">
+                <input name="saver" type="radio" id="yes" value="true" />
+                <label for="yes">SURE!</label>
+              </div>
+            </form>
           </div>
           <div class="creds row hide">
             <div class="col s12 m6">
@@ -101,6 +110,15 @@
       <div class="col s12 m2"></div>
     </div>
 
+    <div id="result" class="row hide">
+      <div class="col s12 m2"></div>
+      <div class="col s12 m8">
+        <h1>Your creation:</h1>
+        <img id="rimg" class="responsive-img" src=""/>
+        <h5 id="rpage"></h5>
+      </div>
+      <div class="col s12 m2"></div>
+    </div>
 
     <div class="row">
       <h1>Take your Pick...</h1>
@@ -109,7 +127,7 @@
     </div>
 
     <div class="row">
-      <p>This site is an exercise in writing a node app to access an API. Everything dynamically generated on this page is from <a href="https://api.imgflip.com//">https://api.imgflip.com/</a>.</p>
+      <p>This site was an exercise in writing a node app to access an API. Everything dynamically generated on this page is from <a href="https://api.imgflip.com//">https://api.imgflip.com/</a>.</p>
       <p>Also, favicon from <a href="https://icons8.com">Icon pack by Icons8</a></p>
       <p><a class="modal-trigger btn waves-effect waves-light blue accent-1" href="#emailMe">Email Me!</a></p>
     </div>
@@ -154,8 +172,8 @@
     </div>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
-  			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+  			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   			  crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
   <script src="/socket.io/socket.io.js" type="text/javascript"></script>

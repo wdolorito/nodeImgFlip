@@ -77,10 +77,10 @@ const makeCall = (url, type, payload) => {
           })
 
           // res('{"success":false,"error_message":"No texts specified. Remember, API request params are http parameters not JSON."}')
-          res('{"success":true,"data":{"url":"https:\/\/i.imgflip.com\/3cyq2z.jpg","page_url":"https:\/\/imgflip.com\/i\/3cyq2z"}}')
+          // res('{"success":true,"data":{"url":"https:\/\/i.imgflip.com\/3cyq2z.jpg","page_url":"https:\/\/imgflip.com\/i\/3cyq2z"}}')
 
-          // req.write(body)
-          // req.end()
+          req.write(body)
+          req.end()
           break
         default:
       }
