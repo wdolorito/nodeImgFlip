@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon"
   },
   "author": "William Dolorito",
   "license": "UNLICENSED",
@@ -16,11 +16,11 @@
     "express": "^4.17.1",
     "gmail-send": "^1.8.10",
     "node-cache": "^4.2.1",
-    "qs": "^6.9.0",
+    "qs": "^6.9.4",
     "socket.io": "^2.3.0",
     "throttled-queue": "^1.0.7"
   },
   "devDependencies": {
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.4"
   }
 }
