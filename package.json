@@ -13,14 +13,14 @@
   "author": "William Dolorito",
   "license": "UNLICENSED",
   "dependencies": {
-    "express": "^4.17.1",
-    "gmail-send": "^1.8.10",
-    "node-cache": "^4.2.1",
-    "qs": "^6.9.4",
-    "socket.io": "^2.3.0",
-    "throttled-queue": "^1.0.7"
+    "express": "*",
+    "gmail-send": "*",
+    "node-cache": "*",
+    "qs": "*",
+    "socket.io": "*",
+    "throttled-queue": "*"
   },
   "devDependencies": {
-    "nodemon": "^1.19.4"
+    "nodemon": "*"
   }
 }
